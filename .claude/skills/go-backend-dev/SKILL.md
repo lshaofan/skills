@@ -14,7 +14,8 @@ description: Go 后端开发规范技能，基于 DDD 四层架构和 go-framewo
 | **新增业务模块** | Model、Repository、DAO、DTO、Service、Action、API | 全部文档 |
 | **新增 API 接口** | DTO、Service 方法、Action、路由 | dto-patterns.md, service-patterns.md, api-patterns.md |
 | **修改业务逻辑** | Service | service-patterns.md, infrastructure.md |
-| **添加数据字段** | Model、DTO | naming-conventions.md, dto-patterns.md |
+| **添加数据模型** | Model、migrate | model-patterns.md, naming-conventions.md |
+| **添加数据字段** | Model、DTO | model-patterns.md, dto-patterns.md |
 | **添加异常/常量** | exp、constants | infrastructure.md |
 | **修改中间件/认证** | middleware、helper | infrastructure.md |
 
@@ -66,6 +67,21 @@ import helper "github.com/lshaofan/go-framework/pkg/helper"
 
 ## 关键模式速查
 
+### Model
+
+```go
+type Xxx struct {
+    gorm.Model  // 必须嵌入，提供 ID、CreatedAt、UpdatedAt、DeletedAt
+    Name   string `gorm:"size:255;not null" json:"name"`
+    Status uint   `gorm:"type:tinyint(1);not null;default:1;comment:状态(1=正常、2=禁用)" json:"status"`
+}
+
+// TableName 必须实现，显式定义表名
+func (Xxx) TableName() string {
+    return "xxx"
+}
+```
+
 ### DTO
 
 ```go
@@ -115,7 +131,9 @@ const (
 
 ## 参考文档
 
+- **架构详解**: [references/architecture.md](references/architecture.md)
 - **文件命名规范**: [references/naming-conventions.md](references/naming-conventions.md)
+- **Model 模式**: [references/model-patterns.md](references/model-patterns.md)
 - **DTO 模式**: [references/dto-patterns.md](references/dto-patterns.md)
 - **Service 模式**: [references/service-patterns.md](references/service-patterns.md)
 - **API/Action 模式**: [references/api-patterns.md](references/api-patterns.md)
